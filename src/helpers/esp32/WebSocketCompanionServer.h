@@ -11,10 +11,15 @@
 #define WS_HANDSHAKE_MAX_LEN  1536
 #endif
 
+#ifndef WS_HANDSHAKE_TIMEOUT_MS
+#define WS_HANDSHAKE_TIMEOUT_MS  5000
+#endif
+
 // Per-client: HTTP upgrade handshake or WebSocket mode with companion state machine (plain ws:// only).
 struct WSClientState {
   mutable WiFiClient client;
   bool in_use;
+  uint32_t accept_ms;
 
   bool handshake_done;
   uint16_t handshake_len;

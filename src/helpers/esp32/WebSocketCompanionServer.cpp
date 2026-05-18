@@ -67,6 +67,7 @@ WebSocketCompanionServer::WebSocketCompanionServer()
   : _server(WiFiServer()), _port(0), _listening(false), _poll_start_idx(0) {
   for (int i = 0; i < WS_COMPANION_MAX_CLIENTS; i++) {
     _clients[i].in_use = false;
+    _clients[i].accept_ms = 0;
     _clients[i].handshake_done = false;
     _clients[i].handshake_len = 0;
     _clients[i].ws_state = WS_STATE_HEADER_0;
@@ -117,22 +118,40 @@ void WebSocketCompanionServer::acceptNewClients() {
         break;
       }
     }
-    if (slot >= 0) {
-      _clients[slot].client = incoming;
-      _clients[slot].in_use = true;
-      _clients[slot].handshake_done = false;
-      _clients[slot].handshake_len = 0;
-      _clients[slot].ws_state = WS_STATE_HEADER_0;
-      _clients[slot].comp_state = COMP_STATE_IDLE;
-    } else {
-      incoming.stop();
+    // No free slot: evict the oldest existing client so a fresh connect can
+    // recover from stuck slots (half-closed sockets where connected() still
+    // reports true). Without this, every new connect is accept()ed then
+    // immediately stop()ed, producing SYN/SYN+ACK/ACK/FIN-ACK with zero data.
+    if (slot < 0) {
+      uint32_t now = millis();
+      uint32_t oldest_age = 0;
+      for (int i = 0; i < WS_COMPANION_MAX_CLIENTS; i++) {
+        uint32_t age = now - _clients[i].accept_ms;
+        if (slot < 0 || age > oldest_age) {
+          slot = i;
+          oldest_age = age;
+        }
+      }
+      _clients[slot].client.stop();
+      _clients[slot].in_use = false;
     }
+    _clients[slot].client = incoming;
+    _clients[slot].in_use = true;
+    _clients[slot].accept_ms = millis();
+    _clients[slot].handshake_done = false;
+    _clients[slot].handshake_len = 0;
+    _clients[slot].ws_state = WS_STATE_HEADER_0;
+    _clients[slot].comp_state = COMP_STATE_IDLE;
   }
 }
 
 void WebSocketCompanionServer::pruneDisconnected() {
+  uint32_t now = millis();
   for (int i = 0; i < WS_COMPANION_MAX_CLIENTS; i++) {
-    if (_clients[i].in_use && !_clients[i].client.connected()) {
+    if (!_clients[i].in_use) continue;
+    bool stale_handshake = !_clients[i].handshake_done &&
+                           (now - _clients[i].accept_ms) > WS_HANDSHAKE_TIMEOUT_MS;
+    if (!_clients[i].client.connected() || stale_handshake) {
       _clients[i].client.stop();
       _clients[i].in_use = false;
     }

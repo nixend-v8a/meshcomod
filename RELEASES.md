@@ -18,6 +18,67 @@ Versioned prebuilts are listed here so you can **roll back** if a newer release 
 
 ---
 
+## v1.15.0.4 — 2026-05-18
+
+**Firmware version:** v1.15.0.4 (meshcomod on upstream **MeshCore 1.15.0**).
+
+**Highlights:**
+- **Wi-Fi WebSocket fix:** Resolves immediate disconnect of the webclient (`connect.meshcomod.com`) over Wi-Fi reported by multiple users — TCP handshake completed but the device closed the connection with zero data exchanged. Caused by stuck WS client slots where `WiFiClient::connected()` kept reporting `true` on a half-closed socket; once both slots filled, every new `accept()` was immediately `stop()`-ed. `WebSocketCompanionServer` now timestamps accepts, evicts the oldest slot when full, and prunes half-open clients after a 5s handshake timeout. Same fix lands in repeater **r1.15.0.4** and room multitransport **r1.15.0.5** below.
+- **Companion matrix refreshed:** V4 OLED, V4 TFT+touch, V3, Wireless Paper, and Xiao in one pinned drop.
+
+**Prebuilt binaries:**
+
+| Device | Merged (recommended) | Non-merged |
+|--------|----------------------|------------|
+| Heltec V4 (OLED) | [heltec_v4_companion_radio_usb_tcp-merged.bin](prebuilt/releases/companion/v1.15.0.4/heltec_v4_companion_radio_usb_tcp-merged.bin) | [heltec_v4_companion_radio_usb_tcp.bin](prebuilt/releases/companion/v1.15.0.4/heltec_v4_companion_radio_usb_tcp.bin) |
+| Heltec V4 TFT + touch | [heltec_v4_tft_companion_radio_usb_tcp_touch-merged.bin](prebuilt/releases/companion/v1.15.0.4/heltec_v4_tft_companion_radio_usb_tcp_touch-merged.bin) | [heltec_v4_tft_companion_radio_usb_tcp_touch.bin](prebuilt/releases/companion/v1.15.0.4/heltec_v4_tft_companion_radio_usb_tcp_touch.bin) |
+| Heltec V3 | [Heltec_v3_companion_radio_usb_tcp-merged.bin](prebuilt/releases/companion/v1.15.0.4/Heltec_v3_companion_radio_usb_tcp-merged.bin) | [Heltec_v3_companion_radio_usb_tcp.bin](prebuilt/releases/companion/v1.15.0.4/Heltec_v3_companion_radio_usb_tcp.bin) |
+| Heltec Wireless Paper (E213) | [Heltec_Wireless_Paper_companion_radio_usb_tcp-merged.bin](prebuilt/releases/companion/v1.15.0.4/Heltec_Wireless_Paper_companion_radio_usb_tcp-merged.bin) | [Heltec_Wireless_Paper_companion_radio_usb_tcp.bin](prebuilt/releases/companion/v1.15.0.4/Heltec_Wireless_Paper_companion_radio_usb_tcp.bin) |
+| Seeed Xiao S3 WIO SX1262 | [Xiao_S3_WIO_companion_radio_usb_tcp-merged.bin](prebuilt/releases/companion/v1.15.0.4/Xiao_S3_WIO_companion_radio_usb_tcp-merged.bin) | [Xiao_S3_WIO_companion_radio_usb_tcp.bin](prebuilt/releases/companion/v1.15.0.4/Xiao_S3_WIO_companion_radio_usb_tcp.bin) |
+
+**More details:** [`prebuilt/releases/companion/v1.15.0.4/notes.md`](prebuilt/releases/companion/v1.15.0.4/notes.md).
+
+---
+
+## Repeater TCP r1.15.0.4 — 2026-05-18
+
+**Release id:** **`r1.15.0.4`** — Heltec + Xiao **Wi‑Fi / TCP+WebSocket** repeater images (`*_repeater_tcp`) on the 1.15 line. Same Wi-Fi WebSocket fix as companion v1.15.0.4.
+
+**Highlights:**
+- **Wi-Fi WebSocket fix:** WebSocket server now evicts stuck slots instead of rejecting new connections — see companion v1.15.0.4 above for the full failure mode.
+
+**Prebuilt binaries:**
+
+| Device | Merged (recommended) | Non-merged |
+|--------|----------------------|------------|
+| Heltec V4 (OLED) | [heltec_v4_repeater_tcp-merged.bin](prebuilt/releases/repeater/r1.15.0.4/heltec_v4_repeater_tcp-merged.bin) | [heltec_v4_repeater_tcp.bin](prebuilt/releases/repeater/r1.15.0.4/heltec_v4_repeater_tcp.bin) |
+| Heltec V4 TFT + touch | [heltec_v4_tft_repeater_tcp-merged.bin](prebuilt/releases/repeater/r1.15.0.4/heltec_v4_tft_repeater_tcp-merged.bin) | [heltec_v4_tft_repeater_tcp.bin](prebuilt/releases/repeater/r1.15.0.4/heltec_v4_tft_repeater_tcp.bin) |
+| Heltec V3 | [Heltec_v3_repeater_tcp-merged.bin](prebuilt/releases/repeater/r1.15.0.4/Heltec_v3_repeater_tcp-merged.bin) | [Heltec_v3_repeater_tcp.bin](prebuilt/releases/repeater/r1.15.0.4/Heltec_v3_repeater_tcp.bin) |
+| Heltec Wireless Paper (E213) | [Heltec_Wireless_Paper_repeater_tcp-merged.bin](prebuilt/releases/repeater/r1.15.0.4/Heltec_Wireless_Paper_repeater_tcp-merged.bin) | [Heltec_Wireless_Paper_repeater_tcp.bin](prebuilt/releases/repeater/r1.15.0.4/Heltec_Wireless_Paper_repeater_tcp.bin) |
+| Seeed Xiao S3 WIO SX1262 | [Xiao_S3_WIO_repeater_tcp-merged.bin](prebuilt/releases/repeater/r1.15.0.4/Xiao_S3_WIO_repeater_tcp-merged.bin) | [Xiao_S3_WIO_repeater_tcp.bin](prebuilt/releases/repeater/r1.15.0.4/Xiao_S3_WIO_repeater_tcp.bin) |
+
+**More details:** [`prebuilt/releases/repeater/r1.15.0.4/notes.md`](prebuilt/releases/repeater/r1.15.0.4/notes.md).
+
+---
+
+## Room multitransport r1.15.0.5 — 2026-05-18
+
+**Release id:** **`r1.15.0.5`** — meshcomod **chat room** images with USB+BLE+TCP+WS. Same Wi-Fi WebSocket fix as companion v1.15.0.4.
+
+**Prebuilt binaries:**
+
+| Device | Merged (recommended) | Non-merged |
+|--------|----------------------|------------|
+| Heltec V4 OLED | [heltec_v4_room_server_multitransport-merged.bin](prebuilt/releases/rooms/r1.15.0.5/heltec_v4_room_server_multitransport-merged.bin) | [heltec_v4_room_server_multitransport.bin](prebuilt/releases/rooms/r1.15.0.5/heltec_v4_room_server_multitransport.bin) |
+| Heltec V4 TFT | [heltec_v4_tft_room_server_multitransport-merged.bin](prebuilt/releases/rooms/r1.15.0.5/heltec_v4_tft_room_server_multitransport-merged.bin) | [heltec_v4_tft_room_server_multitransport.bin](prebuilt/releases/rooms/r1.15.0.5/heltec_v4_tft_room_server_multitransport.bin) |
+| Heltec V3 | [Heltec_v3_room_server_multitransport-merged.bin](prebuilt/releases/rooms/r1.15.0.5/Heltec_v3_room_server_multitransport-merged.bin) | [Heltec_v3_room_server_multitransport.bin](prebuilt/releases/rooms/r1.15.0.5/Heltec_v3_room_server_multitransport.bin) |
+| Heltec Wireless Paper | [Heltec_Wireless_Paper_room_server_multitransport-merged.bin](prebuilt/releases/rooms/r1.15.0.5/Heltec_Wireless_Paper_room_server_multitransport-merged.bin) | [Heltec_Wireless_Paper_room_server_multitransport.bin](prebuilt/releases/rooms/r1.15.0.5/Heltec_Wireless_Paper_room_server_multitransport.bin) |
+| Seeed Xiao S3 WIO SX1262 | [Xiao_S3_WIO_room_server_multitransport-merged.bin](prebuilt/releases/rooms/r1.15.0.5/Xiao_S3_WIO_room_server_multitransport-merged.bin) | [Xiao_S3_WIO_room_server_multitransport.bin](prebuilt/releases/rooms/r1.15.0.5/Xiao_S3_WIO_room_server_multitransport.bin) |
+
+**More details:** [`prebuilt/releases/rooms/r1.15.0.5/notes.md`](prebuilt/releases/rooms/r1.15.0.5/notes.md).
+
+---
+
 ## v1.15.0.3 — 2026-04-21
 
 **Firmware version:** v1.15.0.3 (meshcomod on upstream **MeshCore 1.15.0**).
