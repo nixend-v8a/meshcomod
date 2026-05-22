@@ -693,7 +693,7 @@ public:
       return true;
     }
 #endif
-    if (c == KEY_ENTER && _page == HomePage::SHUTDOWN) {
+    if ((c == KEY_ENTER || c == KEY_LONG_ENTER) && _page == HomePage::SHUTDOWN) {
       _shutdown_init = true;  // need to wait for button to be released
       return true;
     }

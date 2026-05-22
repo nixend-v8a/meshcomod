@@ -18,6 +18,27 @@ Versioned prebuilts are listed here so you can **roll back** if a newer release 
 
 ---
 
+## v1.15.0.5 — 2026-05-22
+
+**Firmware version:** v1.15.0.5 (meshcomod on upstream **MeshCore 1.15.0**).
+
+**Highlights:**
+- **Heltec V4 OLED long-press hibernate fix:** SHUTDOWN/POWER tab now actually hibernates on long-press. The on-screen hint already read "HIBERNATE: long press", but the handler only matched `KEY_ENTER` while single-button long-press emits `KEY_LONG_ENTER` — so the press was silently dropped. Handler now accepts both keys (same pattern used by the ADVERT/GPS tabs). Any single-button companion device benefits.
+- **V4 TFT no longer built from this folder:** Drop now ships V4 OLED, V3, Wireless Paper, and Xiao only. TFT envs remain in `platformio.ini` but are not produced/promoted from this tree.
+
+**Prebuilt binaries:**
+
+| Device | Merged (recommended) | Non-merged |
+|--------|----------------------|------------|
+| Heltec V4 (OLED) | [heltec_v4_companion_radio_usb_tcp-merged.bin](prebuilt/releases/companion/v1.15.0.5/heltec_v4_companion_radio_usb_tcp-merged.bin) | [heltec_v4_companion_radio_usb_tcp.bin](prebuilt/releases/companion/v1.15.0.5/heltec_v4_companion_radio_usb_tcp.bin) |
+| Heltec V3 | [Heltec_v3_companion_radio_usb_tcp-merged.bin](prebuilt/releases/companion/v1.15.0.5/Heltec_v3_companion_radio_usb_tcp-merged.bin) | [Heltec_v3_companion_radio_usb_tcp.bin](prebuilt/releases/companion/v1.15.0.5/Heltec_v3_companion_radio_usb_tcp.bin) |
+| Heltec Wireless Paper (E213) | [Heltec_Wireless_Paper_companion_radio_usb_tcp-merged.bin](prebuilt/releases/companion/v1.15.0.5/Heltec_Wireless_Paper_companion_radio_usb_tcp-merged.bin) | [Heltec_Wireless_Paper_companion_radio_usb_tcp.bin](prebuilt/releases/companion/v1.15.0.5/Heltec_Wireless_Paper_companion_radio_usb_tcp.bin) |
+| Seeed Xiao S3 WIO SX1262 | [Xiao_S3_WIO_companion_radio_usb_tcp-merged.bin](prebuilt/releases/companion/v1.15.0.5/Xiao_S3_WIO_companion_radio_usb_tcp-merged.bin) | [Xiao_S3_WIO_companion_radio_usb_tcp.bin](prebuilt/releases/companion/v1.15.0.5/Xiao_S3_WIO_companion_radio_usb_tcp.bin) |
+
+**More details:** [`prebuilt/releases/companion/v1.15.0.5/notes.md`](prebuilt/releases/companion/v1.15.0.5/notes.md).
+
+---
+
 ## v1.15.0.4 — 2026-05-18
 
 **Firmware version:** v1.15.0.4 (meshcomod on upstream **MeshCore 1.15.0**).
