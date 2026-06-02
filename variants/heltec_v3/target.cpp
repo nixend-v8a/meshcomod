@@ -60,3 +60,15 @@ mesh::LocalIdentity radio_new_identity() {
   return mesh::LocalIdentity(&rng);  // create new random identity
 }
 
+
+
+float radio_get_instant_rssi(float freq_mhz) {
+    // Строго 863-870 МГц — жёсткая защита
+  if (freq_mhz < 863.0f || freq_mhz > 870.0f) return -200.0f;
+  radio.setFrequency(freq_mhz);
+  radio.startReceive();
+  delay(2);  // пассивно слушаем 2 мс
+  float rssi = radio.getRSSI(false);
+  radio.standby();
+  return rssi;
+}
