@@ -7,6 +7,7 @@
 #include <helpers/HttpOtaDisplayState.h>
 #include <helpers/RepeaterTcpOtaEmit.h>
 #include "WiFiConfig.h"
+#include "CliExtensions.h"#include "CliExtensions.h"h
 #ifdef ESP32
 #if defined(WIFI_SSID) || defined(MULTI_TRANSPORT_COMPANION)
 #include <WiFi.h>
@@ -410,6 +411,7 @@ void MyMesh::pushMeshcomodReply(const char* text, bool immediate_current) {
   }
 }
 
+void meshcomodReply(const char* m){pushMeshcomodReply(m);}
 bool MyMesh::handleMeshcomodCommand(const char* text, int text_len) {
   if (!text || text_len <= 0) {
     pushMeshcomodReply(kMeshcomodHelpMsg);
@@ -858,6 +860,7 @@ bool MyMesh::handleMeshcomodCommand(const char* text, int text_len) {
   }
 #endif
 #endif
+  if (cliExtHandle(p)) return true;
   pushMeshcomodReply(kMeshcomodHelpMsg);
   return true;
 }
@@ -3478,6 +3481,7 @@ void MyMesh::loop() {
     // Always process companion frames in the same loop so TCP/BLE clients cannot
     // be starved by plain-text console traffic on USB Serial.
     checkSerialInterface();
+    cliExtLoop();
   }
 
   // is there are pending dirty contacts write needed?
