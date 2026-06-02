@@ -7,7 +7,7 @@
 #include <helpers/HttpOtaDisplayState.h>
 #include <helpers/RepeaterTcpOtaEmit.h>
 #include "WiFiConfig.h"
-#include "CliExtensions.h"#include "CliExtensions.h"h
+#include "CliExtensions.h"h
 #ifdef ESP32
 #if defined(WIFI_SSID) || defined(MULTI_TRANSPORT_COMPANION)
 #include <WiFi.h>
